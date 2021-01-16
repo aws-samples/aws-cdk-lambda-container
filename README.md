@@ -67,7 +67,7 @@ To verify that DynamoDB has finished creating the Movies table, use the describe
 
 ```bash
 aws dynamodb --region us-east-1 describe-table --table-name Movies | grep TableStatus
-
+```
 Proceed to the next step if you get  "TableStatus": "ACTIVE". 
 Otherwise if your table is marked as “CREATING”, wait a few seconds and try again.
 
