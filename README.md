@@ -1,4 +1,4 @@
-# Build APIs Using container image support for AWS Lambda with AWS CDK
+# Develop & deploy AWS Lambda functions using container image support
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 ## Architecture
 <img width="1042" alt="architecture-screenshot" src="images/Architecture-1.png">
