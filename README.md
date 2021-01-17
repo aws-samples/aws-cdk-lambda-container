@@ -35,7 +35,7 @@ Log into the AWS Management Console and search for Cloud9 service in the search 
   ```
 7. Clone the GitHub repository containing the code sample for this example:
 ```bash
-  git clone https://github.com/aws-samples/aws-cdk-lambda-conatiner.git
+  git clone https://github.com/aws-samples/aws-cdk-lambda-container.git
 ```
 
 ## Create Amazon DynamoDB Movies Table
