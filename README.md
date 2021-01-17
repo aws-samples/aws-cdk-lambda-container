@@ -23,7 +23,6 @@ Here are the steps we’ll be following to implement the above architecture:
 - Cleanup
 - Conclusion
 
-
 ## Create and configure AWS Cloud9 environment
 Log into the AWS Management Console and search for Cloud9 service in the search bar.
 
