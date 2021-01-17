@@ -28,10 +28,10 @@ Log into the AWS Management Console and search for Cloud9 service in the search 
 
 1. Select Cloud9 and create an AWS Cloud9 environment based on Amazon Linux 2.
     - We will be using the us-east-1 region for this example, so our Cloud9 environment will be created there.
-2. Create an IAM role for Cloud9 workspace as explained here. 
-3. Attach the IAM role to your workspace as explained here. 
-4. Turn off the AWS managed temporary credentials of the Cloud9 environment as explained here.
-    - You can also resize the Amazon Elastic Block Store (Amazon EBS) volume that is associated with an Amazon EC2 instance for an environment. The detailed steps are documented here.
+2. Create an IAM role for Cloud9 workspace as explained [here](https://www.eksworkshop.com/020_prerequisites/iamrole/). 
+3. Attach the IAM role to your workspace as explained [here](https://www.eksworkshop.com/020_prerequisites/ec2instance/). 
+4. Turn off the AWS managed temporary credentials of the Cloud9 environment as explained [here](https://www.eksworkshop.com/020_prerequisites/workspaceiam/).
+    - You can also resize the Amazon Elastic Block Store (Amazon EBS) volume that is associated with an Amazon EC2 instance for an environment. The detailed steps are documented [here](https://docs.aws.amazon.com/cloud9/latest/user-guide/move-environment.html#move-environment-resize).
 5. Open a new terminal in Cloud9.
 6. Install jq by running:
   ```bash
