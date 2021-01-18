@@ -368,7 +368,7 @@ Using Cloud9 environment, open a new terminal and use the following commands:
 cd ~/environment/aws-cdk-lambda-container/cdk
 ```
 Compile the Typescript into a CDK program use this command:
-``bash
+```bash
 npm run build
 ```
 Let us use the us-east-1 region.
