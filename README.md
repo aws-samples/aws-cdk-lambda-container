@@ -5,6 +5,18 @@
 [![PyPI version](https://badge.fury.io/py/aws-cdk.core.svg)](https://badge.fury.io/py/aws-cdk.core)
 [![NuGet version](https://badge.fury.io/nu/Amazon.CDK.svg)](https://badge.fury.io/nu/Amazon.CDK)
 
+At AWS re:Invent 2020, [AWS Lambda](https://aws.amazon.com/lambda) released [Container Image Support for Lambda functions](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/). With this new feature, AWS Lambda now enables you to package and deploy functions as container images. Customers can leverage the flexibility and familiarity of container tooling, and the agility and operational simplicity of AWS Lambda to build applications.
+ - Many customers have invested in container tooling, development workflows, and expertise.
+ - Customers using container tooling and packaging couldn’t get the full benefits of AWS Lambda.
+ - Customers couldn’t use their preferred community or private enterprise container images.
+
+This blog post discusses the architecture and implementation of an HTTP API that is backed by two AWS Lambda functions packaged as a container image. These Lambda functions use the AWS SDK to retrieve data from the backend Amazon DynamoDB. We use [AWS CDK](https://aws.amazon.com/cdk/) for the  implementation.
+
+## Prerequisites
+In order to implement the instructions laid out in this post, you will need the following:
+An [AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/) 
+A [GitHub account](https://help.github.com/en/github/getting-started-with-github/signing-up-for-a-new-github-account)
+
 ## Architecture
 <img width="1042" alt="architecture-screenshot" src="images/Architecture-1.png">
 
