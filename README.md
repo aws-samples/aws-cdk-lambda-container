@@ -14,8 +14,9 @@ This blog post discusses the architecture and implementation of an HTTP API that
 
 ## Prerequisites
 In order to implement the instructions laid out in this post, you will need the following:
-An [AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/) 
-A [GitHub account](https://help.github.com/en/github/getting-started-with-github/signing-up-for-a-new-github-account)
+
+ - An [AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/) 
+ - A [GitHub account](https://help.github.com/en/github/getting-started-with-github/signing-up-for-a-new-github-account)
 
 ## Architecture
 <img width="1042" alt="architecture-screenshot" src="images/Architecture-1.png">
