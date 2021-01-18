@@ -410,7 +410,7 @@ Here is the integration of the HTTP API with the backend Lambda functions inside
 <img src="images/API_Gateway.png" width="640"  />
 
 ## AWS Lambda 1ms billing
-On December 1, 2020 AWS Lambda [reduced the billing granularity for Lambda function duration from 100ms down to 1ms[(https://aws.amazon.com/about-aws/whats-new/2020/12/aws-lambda-changes-duration-billing-granularity-from-100ms-to-1ms/#:~:text=AWS%20Lambda%20reduced%20the%20billing,100%20ms%20increment%20per%20invoke.)]. This will lower the price for most Lambda functions, more so for short duration functions. Their compute duration will be billed in 1ms increments instead of being rounded up to the nearest 100 ms increment per invocation.
+On December 1, 2020 AWS Lambda [reduced the billing granularity for Lambda function duration from 100ms down to 1ms](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-lambda-changes-duration-billing-granularity-from-100ms-to-1ms/#:~:text=AWS%20Lambda%20reduced%20the%20billing,100%20ms%20increment%20per%20invoke.). This will lower the price for most Lambda functions, more so for short duration functions. Their compute duration will be billed in 1ms increments instead of being rounded up to the nearest 100 ms increment per invocation.
 
 AWS Lambda reduced the billing granularity for Lambda function duration from 100ms down to 1ms. This will lower the price for most Lambda functions, more so for short duration functions. Their compute duration will be billed in 1ms increments instead of being rounded up to the nearest 100 ms increment per invocation.
 
