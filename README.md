@@ -46,10 +46,6 @@ Developers can use their local machines to set up an environment and using AWS C
 
 We shall be using the example Movies table as explained in the [AWS Documentation on creating a DynamoDB Table with the AWS SDK for JavaScript](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html).
 
-
-
-[here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html).
-
 Let us create a Movies table with a composite Primary Key comprising:
 
 - Partition Key --- year
