@@ -26,6 +26,8 @@ Here are the steps we’ll be following to implement the above architecture:
 ## Create and configure AWS Cloud9 environment
 Developers can use their local machines to set up an environment and using AWS Cloud9 is an option. However in this blog post we shall use AWS CLoud9 for development. Log into the AWS Management Console and search for [Cloud9](https://aws.amazon.com/cloud9/) service in the search bar.
 
+<img width="1042" alt="Cloud9" src="images/Cloud9Install.png">
+
 1. Select Cloud9 and create an AWS Cloud9 environment based on Amazon Linux 2.
     - We will be using the us-east-1 region for this example, so our Cloud9 environment will be created there.
 2. Create an IAM role for Cloud9 workspace as explained [here](https://www.eksworkshop.com/020_prerequisites/iamrole/). 
