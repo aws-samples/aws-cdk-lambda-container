@@ -24,7 +24,7 @@ Here are the steps we’ll be following to implement the above architecture:
 - Conclusion
 
 ## Create and configure AWS Cloud9 environment
-Log into the AWS Management Console and search for Cloud9 service in the search bar.
+Developers can use their local machines to set up an environment and using AWS Cloud9 is an option. However in this blog post we shall use AWS CLoud9 for development. Log into the AWS Management Console and search for [Cloud9](https://aws.amazon.com/cloud9/) service in the search bar.
 
 1. Select Cloud9 and create an AWS Cloud9 environment based on Amazon Linux 2.
     - We will be using the us-east-1 region for this example, so our Cloud9 environment will be created there.
@@ -76,24 +76,26 @@ Proceed to the next step if you get  "TableStatus": "ACTIVE".
 Otherwise if your table is marked as “CREATING”, wait a few seconds and try again.
 
 ## Load Sample data into Movies Table
+Navigate to the DynamoDB directory in the code sample and run the MoviesLoadData.js NodeJS script.
+
 ```bash
 cd ~/environment/DynamoDB
 npm install
 export AWS_REGION=us-east-1
 node MoviesLoadData.js
 ```
-This script will load sample movie data into the newly created Movies DynamoDB table.
+This script will load sample movie data into the newly created **Movies** DynamoDB table.
 
 <img src="images/DynamoDB-Load.png" width="640"  />
 
 ## Query Data
-Run the following command to make sure that you can query the movie data of the 2013 movie “Gravity”.
+Run the following command to make sure that you can query the movie data of the 2013 movie Rush.
 
 ```bash
 aws dynamodb --region us-east-1 \
     get-item --consistent-read \
     --table-name Movies \
-    --key '{ "year": {"N": "2013"}, "title": {"S": "Gravity"}}'
+    --key '{ "year": {"N": "2013"}, "title": {"S": "Rush"}}'
 ```
 
 ## Create Lambda functions
@@ -205,11 +207,11 @@ COPY list.js get.js package.json package-lock.json ${LAMBDA_TASK_ROOT}/
 # Install NPM dependencies for function
 RUN npm install
 ```
-This Dockerfile specifies the publicly available AWS base image for Lambda with NodeJS 12 public.ecr.aws/lambda/nodejs:12. It copies the list.js, get.js, package.json and package-lock.json files into the ${LAMBDA_TASK_ROOT} folder, then runs npm install to fetch the function’s dependencies. The ${LAMBDA_TASK_ROOT} represents the path to our Lambda functions as documented in the AWS Documentation on using AWS Lambda environment variables. 
+This Dockerfile specifies the publicly available AWS base image for Lambda with NodeJS 12 public.ecr.aws/lambda/nodejs:12. It copies the list.js, get.js, package.json and package-lock.json files into the ${LAMBDA_TASK_ROOT} folder, then runs npm install to fetch the function’s dependencies. The ${LAMBDA_TASK_ROOT} represents the path to our Lambda functions as documented in the [AWS Documentation on using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html). 
 
 ## Build Docker image
 
-Now that we have written the Dockerfile and the two lambda functions, let’s take a look at building our Docker container image. A container image includes everything you need to run an application - the code or binary, runtime, dependencies, and any other file system objects required. 
+Now that we have written the Dockerfile and the two lambda functions, let’s take a look at [building](https://docs.docker.com/engine/reference/commandline/build/) our Docker container image. A container image includes everything you need to run an application - the code or binary, runtime, dependencies, and any other file system objects required. 
 From the Cloud9 terminal run the following commands:
 
 cd ~/environment/aws-cdk-lambda-container/src/movie-service
@@ -220,10 +222,13 @@ docker images | grep movie-service
 
 
 ## Test Lambda Functions locally
-In order to locally test our Lambda functions packaged as a container image, we shall use AWS Lambda Runtime Interface Emulator (RIE) which is a proxy for the Lambda Runtime API.
-The Lambda Runtime Interface Emulator (RIE) is a lightweight web server that converts HTTP requests into JSON events to pass to the Lambda functions in the container image. We shall  configure these environment variables: AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, AWS_REGION and DYNAMODB_TABLE
+In order to locally test our Lambda functions packaged as a container image, we shall use [AWS Lambda Runtime Interface Emulator (RIE)](https://github.com/aws/aws-lambda-runtime-interface-emulator) which is a proxy for the Lambda Runtime API.
+The Lambda Runtime Interface Emulator (RIE) is a lightweight web server that converts HTTP requests into JSON events to pass to the Lambda functions in the container image. 
+In the container image, we need to configure the following environment variables:
+- AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, and  AWS_REGION for authentication with the AWS SDK. We are going to use the AWS CLI to get our current environment’s credentials and pass those along to our local container through the use of [aws configure get](https://docs.aws.amazon.com/cli/latest/reference/configure/get.html).
+- DYNAMODB_TABLE to point our **list** and **get** functions to our newly-created dataset in the **Movies** table.
 
-**Run list.js function:** From the Cloud9 terminal run the following command. This command runs the movie-service image as a container and starts up an endpoint for list.js function locally at : http://localhost:9080/2015-03-31/functions/function/invocations. 
+**Run list.js function:** From the Cloud9 terminal run the following command. This command runs the movie-service image as a container and starts up an endpoint for list.js function locally at : http://localhost:9080/2015-03-31/functions/function/invocations 
 
 ```bash
 docker run \
@@ -238,10 +243,10 @@ docker run \
 ```
 **Test list.js function:** Open a new Cloud9 terminal and run the following command. This command invokes list.js function.
 ```bash
-curl -s -XPOST "http://localhost:9080/2015-03-31/functions/function/invocations" -d '{}' | jq
+curl -s "http://localhost:9080/2015-03-31/functions/function/invocations" -d '{}' | jq
 ```
 
-**Run get.js function:** From the Cloud9 terminal run the following command. The following command runs the movie-service image as a container and starts up an endpoint for get.js function locally at: http://localhost:9080/2015-03-31/functions/function/invocations. 
+**Run get.js function:** From the Cloud9 terminal run the following command. The following command runs the movie-service image as a container and starts up an endpoint for get.js function locally at: http://localhost:9080/2015-03-31/functions/function/invocations 
 
 ```bash
 docker run \
@@ -254,7 +259,7 @@ docker run \
     movie-service get.get
 ```
 
-**Test get.js function:** Open a new Cloud9 terminal and run the following command. This command invokes get.js function with two path parameters year=2013 and title=”Rush”.
+**Test get.js function:** Open a new Cloud9 terminal and run the following command. This command invokes **get.js** function with two variables **year="2013"** and **title=”Rush”** under the key labelled **“pathParameters”** to simulate an incoming API Gateway request.
 ```bash
 curl -s "http://localhost:9080/2015-03-31/functions/function/invocations" -d '{"pathParameters": {"year": "2013", "title": "Rush"} }' | jq
 ```
@@ -269,20 +274,20 @@ cd ~/environment/aws-cdk-lambda-container/cdk
 npm install 
 ```
 
-This will install all the latest CDK modules under the node_modules directory.
+This will install all the latest CDK modules under the *node_modules* directory.
 
 ## Creating AWS resources using the CDK
-We shall implement this architecture using an AWS CDK application consisting of one CDK stack written in typescript. Under the cdk/lib folder, open the http-api-aws-lambda-container-stack.ts file and let us explore the following different CDK constructs.
+We shall implement this architecture using an AWS CDK application consisting of one CDK stack written in typescript. Under the *cdk/lib* folder, open the *http-api-aws-lambda-container-stack.ts* file and let us explore the following different CDK constructs.
 
 ### DynamoDB table
-Since we have created the Movies DynamoDB table earlier using AWS cli, we can import this existing table using AWS CDK as documented [here](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-dynamodb.ITable.html).
+Since we have created the Movies DynamoDB table earlier using the AWS CLI, we can import this existing table using AWS CDK as documented [here](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-dynamodb.ITable.html).
 
 ```typescript
 const table = dynamodb.Table.fromTableName(this, 'MoviesTable', 'Movies');
 ```
 
 ### Lambda functions
-Developers can now package and deploy AWS Lambda functions as a container image of up to 10 GB. This makes it easy to build Lambda based applications using familiar container tooling, workflows, and dependencies. Let us create two Lambda functions using AWS CDK as documented [here](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-lambda.DockerImageFunction.html). The code attribute is using [static fromImageAsset(directory, props?)](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-lambda.DockerImageCode.html#static-fromwbrimagewbrassetdirectory-propsspan-classapi-icon-api-icon-experimental-titlethis-api-element-is-experimental-it-may-change-without-noticespan) method of the [DockerImageCode](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-lambda.DockerImageCode.html) class and it picks up the Dockerfile under src/movie-service directory.
+Developers can now package and deploy AWS Lambda functions as a container image of up to 10 GB. This makes it easy to build Lambda based applications using familiar container tooling, workflows, and dependencies. Let us create two Lambda functions using the AWS CDK [DockrImageFunction](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-lambda.DockerImageFunction.html) class. The code attribute is using [static fromImageAsset(directory, props?)](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-lambda.DockerImageCode.html#static-fromwbrimagewbrassetdirectory-propsspan-classapi-icon-api-icon-experimental-titlethis-api-element-is-experimental-it-may-change-without-noticespan) method of the [DockerImageCode](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-lambda.DockerImageCode.html) class and it picks up the Dockerfile under src/movie-service directory.
 
 **listMovieFunction:**
 
@@ -313,7 +318,7 @@ const getMovieFunction = new lambda.DockerImageFunction(this, 'getMovieFunction'
 });
 ```
 ### Lambda proxy integrations
-Amazon API Gateway Lambda proxy integration is a simple, powerful, and nimble mechanism to build an API with a setup of a single API method. The Lambda proxy integration allows the client to call a single Lambda function in the backend. In Lambda proxy integration, when a client submits an API request, API Gateway passes to the integrated Lambda function the raw request as-is, except that the order of the request parameters is not preserved. Let us create two Lambda proxy integrations for the two Lambda functions using LambdaProxyIntegration class which takes LambdaProxyIntegrationProps as an argument.
+Amazon API Gateway Lambda proxy integration is a simple, powerful, and nimble mechanism to build an API with a setup of a single API method. The Lambda proxy integration allows the client to call a single Lambda function in the backend. In Lambda proxy integration, when a client submits an API request, API Gateway passes to the integrated Lambda function the raw request as-is. Let us create two Lambda proxy integrations for the two Lambda functions using LambdaProxyIntegration class which takes LambdaProxyIntegrationProps as an argument.
 
 **listMovieFunctionIntegration:** 
 
@@ -331,7 +336,7 @@ const getMovieFunctionIntegration =  new apigintegration.LambdaProxyIntegration(
 ```
 
 ### HTTP API
-HTTP APIs enable developers to create RESTful APIs with lower latency and lower cost than REST APIs. We can use HTTP APIs to send requests to AWS Lambda functions. We shall  create an HTTP API that integrates with the two Lambda functions on the backend. When a client calls this API, API Gateway sends the request to the Lambda function and returns the function's response back to the client. Here is the code for the [HTTP API](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-apigatewayv2.HttpApi.html) with a default stage.
+[HTTP APIs for Amazon API Gateway](https://aws.amazon.com/blogs/compute/announcing-http-apis-for-amazon-api-gateway/) enable developers to create RESTful APIs with lower latency and lower cost than REST APIs(for more information about HTTP APIs please check out [this AWS Compute Blog post](https://aws.amazon.com/blogs/compute/building-better-apis-http-apis-now-generally-available/)). We can use HTTP APIs to send requests to AWS Lambda functions. We shall  create an HTTP API that integrates with the two Lambda functions on the backend. When a client calls this API, API Gateway sends the request to the Lambda function and returns the function's response back to the client. Here is the code for the [HTTP API](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-apigatewayv2.HttpApi.html) with a default stage.
 
 ```typescript
 const httpApi = new apig.HttpApi(this, "httpApi", {
@@ -341,7 +346,7 @@ const httpApi = new apig.HttpApi(this, "httpApi", {
 ```
 
 ### HTTP API Routes
-HTTP API Routes consist of two parts: an HTTP method and a resource path and routes direct incoming API requests to backend resources like AWS Lambda functions. We shall add GET /list route to integrate with the listMovieFunction Lambda function and GET /{year}/{title} route to integrate with the getMovieFunction Lambda function. For additional details, please refer to the HttpRoute class [here](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-apigatewayv2.HttpRoute.html).
+HTTP API Routes consist of two parts: an HTTP method and a resource path. Routes direct incoming API requests to backend resources like AWS Lambda functions. We shall add a *GET /list* route to integrate with the listMovieFunction Lambda function and a *GET /{year}/{title}* route to integrate with the getMovieFunction Lambda function. For additional details, please refer to the HttpRoute class documented [here](https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-apigatewayv2.HttpRoute.html).
 
 ```typescript
 httpApi.addRoutes({
@@ -370,13 +375,14 @@ Let us use the us-east-1 region.
 ```bash
 export AWS_REGION=us-east-1
 ```
-To create that S3 bucket and any other infrastructure the CDK requires, run this command:
+To create the initial CDK infrastructure in your AWS account in the specified region (us-east-1 in this example), run the [cdk bootstrap](https://docs.aws.amazon.com/cdk/latest/guide/bootstrapping.html) command as such:
+
 ```bash
 cdk bootstrap 
 ```
 The CDK uses the same supporting infrastructure for all projects within a region, so you only need to run the bootstrap command once in any region in which you create CDK stacks.
 
-Finally launch the stack using this command:
+Finally deploy the stack using this command:
 ```bash
 cdk deploy
 ```
@@ -389,7 +395,7 @@ The syntax and additional details of these commands are documented [here](https:
 <img src="images/cdk-deploy_censored.jpg" width="640"  />
 
 ## Test the HTTP API
-Take a note of the Http Api endpoints of the List and Get Lambda Functions as shown above. Using the Cloud9 terminal run the following commands:
+Take a note of the HTTP API endpoints of the List and Get Lambda Functions as shown above. Using the Cloud9 terminal run the following commands:
 ```bash
 curl -s https://xxxxxxxxx.execute-api.us-east-1.amazonaws.com/list | jq
 
@@ -399,11 +405,13 @@ curl -s https://xxxxxxxxx.execute-api.us-east-1.amazonaws.com/get/2013/Rush | jq
 <img src="images/GetFunction_censored.jpg" width="640"  />
 
 ## AWS API Gateway (AWS Management Console)
-Here is the integration of the Http Api with the backend Lambda functions inside the AWS Management Console.
+Here is the integration of the HTTP API with the backend Lambda functions inside the AWS Management Console.
 
 <img src="images/API_Gateway.png" width="640"  />
 
 ## AWS Lambda 1ms billing
+On December 1, 2020 AWS Lambda [reduced the billing granularity for Lambda function duration from 100ms down to 1ms[(https://aws.amazon.com/about-aws/whats-new/2020/12/aws-lambda-changes-duration-billing-granularity-from-100ms-to-1ms/#:~:text=AWS%20Lambda%20reduced%20the%20billing,100%20ms%20increment%20per%20invoke.)]. This will lower the price for most Lambda functions, more so for short duration functions. Their compute duration will be billed in 1ms increments instead of being rounded up to the nearest 100 ms increment per invocation.
+
 AWS Lambda reduced the billing granularity for Lambda function duration from 100ms down to 1ms. This will lower the price for most Lambda functions, more so for short duration functions. Their compute duration will be billed in 1ms increments instead of being rounded up to the nearest 100 ms increment per invocation.
 
 <img src="images/Lambda-1ms-Billing.png" width="640"  />
