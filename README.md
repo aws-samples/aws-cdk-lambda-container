@@ -44,7 +44,11 @@ Developers can use their local machines to set up an environment and using AWS C
 
 ## Create Amazon DynamoDB Movies Table
 
-We shall be using the example Movies table as explained [here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html).
+We shall be using the example Movies table as explained in the [AWS Documentation on creating a DynamoDB Table with the AWS SDK for JavaScript](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html).
+
+
+
+[here](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.01.html).
 
 Let us create a Movies table with a composite Primary Key comprising:
 
@@ -425,7 +429,7 @@ cdk destroy
 ```
 (Enter “y” in response to: Are you sure you want to delete (y/n)?).
 
-To clean up the Movies DynamoDB table created manually, run the following commands:
+To clean up the Movies DynamoDB table created manually, run the following command:
 ```bash
 aws dynamodb --region us-east-1  delete-table --table-name  Movies
 ```
