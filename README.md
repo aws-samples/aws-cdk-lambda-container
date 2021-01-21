@@ -96,7 +96,7 @@ Otherwise if your table is marked as “CREATING”, wait a few seconds and try 
 Navigate to the DynamoDB directory in the code sample and run the MoviesLoadData.js NodeJS script.
 
 ```bash
-cd ~/environment/DynamoDB
+cd ~/environment/aws-cdk-lambda-container/DynamoDB
 npm install
 export AWS_REGION=us-east-1
 node MoviesLoadData.js
@@ -231,9 +231,11 @@ This Dockerfile specifies the publicly available AWS base image for Lambda with 
 Now that we have written the Dockerfile and the two lambda functions, let’s take a look at [building](https://docs.docker.com/engine/reference/commandline/build/) our Docker container image. A container image includes everything you need to run an application - the code or binary, runtime, dependencies, and any other file system objects required. 
 From the Cloud9 terminal run the following commands:
 
+```
 cd ~/environment/aws-cdk-lambda-container/src/movie-service
 docker build -t movie-service .
 docker images | grep movie-service
+```
 
 <img src="images/Docker-build.png" width="640"  />
 
