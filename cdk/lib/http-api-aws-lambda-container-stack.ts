@@ -20,9 +20,9 @@ export class HttpApiAwsLambdaContainerStack extends cdk.Stack {
 
     //AWS Lambda Functions
     
-    const listMusicFunction = new lambda.DockerImageFunction(this, 'listMusicFunction',{
-        functionName: 'listMusicFunction',
-        code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../src/music-service'), {
+    const listMovieFunction = new lambda.DockerImageFunction(this, 'listMovieFunction',{
+        functionName: 'listMovieFunction',
+        code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../src/movie-service'), {
         cmd: [ "list.list" ],
         entrypoint: ["/lambda-entrypoint.sh"],
         }),
@@ -31,9 +31,9 @@ export class HttpApiAwsLambdaContainerStack extends cdk.Stack {
         },
     });
     
-    const getMusicFunction = new lambda.DockerImageFunction(this, 'getMusicFunction',{
-        functionName: 'getMusicFunction',
-        code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../src/music-service'), {
+    const getMovieFunction = new lambda.DockerImageFunction(this, 'getMovieFunction',{
+        functionName: 'getMovieFunction',
+        code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../src/movie-service'), {
         cmd: [ "get.get" ],
         entrypoint: ["/lambda-entrypoint.sh"],
         }),
@@ -57,22 +57,22 @@ export class HttpApiAwsLambdaContainerStack extends cdk.Stack {
     
     //Grant CloudWatch access to Lambda Functions
     
-    listMusicFunction.addToRolePolicy(cloudWatchLogsPolicyPolicy);
-    getMusicFunction.addToRolePolicy(cloudWatchLogsPolicyPolicy);
+    listMovieFunction.addToRolePolicy(cloudWatchLogsPolicyPolicy);
+    getMovieFunction.addToRolePolicy(cloudWatchLogsPolicyPolicy);
 
     //Grant ReadWrite access to Lambda Functions
     
-    table.grantReadWriteData(listMusicFunction);
-    table.grantReadWriteData(getMusicFunction);
+    table.grantReadWriteData(listMovieFunction);
+    table.grantReadWriteData(getMovieFunction);
     
     // Lambda Integrations
     
-    const listMusicFunctionIntegration = new apigintegration.LambdaProxyIntegration({
-      handler: listMusicFunction,
+    const listMovieFunctionIntegration = new apigintegration.LambdaProxyIntegration({
+      handler: listMovieFunction,
     });
     
-    const getMusicFunctionIntegration =  new apigintegration.LambdaProxyIntegration({
-      handler: getMusicFunction,
+    const getMovieFunctionIntegration =  new apigintegration.LambdaProxyIntegration({
+      handler: getMovieFunction,
     });
     
     //Http Api
@@ -85,13 +85,13 @@ export class HttpApiAwsLambdaContainerStack extends cdk.Stack {
     //Http Api Routes
     
     httpApi.addRoutes({
-      integration: listMusicFunctionIntegration, 
+      integration: listMovieFunctionIntegration, 
       methods: [apig.HttpMethod.GET], 
       path: '/list',
     });
     
     httpApi.addRoutes({
-      integration: getMusicFunctionIntegration,
+      integration: getMovieFunctionIntegration,
       methods: [apig.HttpMethod.GET],
       path: '/get/{year}/{title}',
     });
@@ -99,19 +99,19 @@ export class HttpApiAwsLambdaContainerStack extends cdk.Stack {
     // API and Service Endpoints
     
     const httpApiEndpoint = httpApi.apiEndpoint;
-    const listMusicFunctionEndpoint = httpApiEndpoint + "/list";
-    const getMusicFunctionEndpoint = httpApiEndpoint + "/get/{year}/{title}";
+    const listMovieFunctionEndpoint = httpApiEndpoint + "/list";
+    const getMovieFunctionEndpoint = httpApiEndpoint + "/get/{year}/{title}";
     
     new cdk.CfnOutput(this, "Http Api endpoint: ", {
       value: httpApiEndpoint,
     });
     
-    new cdk.CfnOutput(this, "Http Api endpoint - listMusicFunction : ", {
-      value: listMusicFunctionEndpoint,
+    new cdk.CfnOutput(this, "Http Api endpoint - listMovieFunction : ", {
+      value: listMovieFunctionEndpoint,
     });
     
-    new cdk.CfnOutput(this, "Http Api endpoint - getMusicFunction : ", {
-      value: getMusicFunctionEndpoint,
+    new cdk.CfnOutput(this, "Http Api endpoint - getMovieFunction : ", {
+      value: getMovieFunctionEndpoint,
     });
   }
 }
