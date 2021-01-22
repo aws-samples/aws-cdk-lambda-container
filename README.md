@@ -21,7 +21,7 @@ In order to implement the instructions laid out in this post, you will need the 
  - A [GitHub account](https://help.github.com/en/github/getting-started-with-github/signing-up-for-a-new-github-account)
 
 ## Architecture
-<img width="1042" alt="architecture-screenshot" src="images/Architecture-1.png">
+<img width="1042" alt="architecture-screenshot" src="images/Architecture-2.png">
 
 Here are the steps we’ll be following to implement the above architecture:
 
