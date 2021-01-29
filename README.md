@@ -15,9 +15,8 @@ This project discusses the architecture and implementation of an HTTP API that i
 We will also discuss the new AWS Lambda 1ms Billing Granularity that adds to the cost savings for customers.
 
 ## Contributors
-Irshad A Buchh, Amazon Web Services
-
-Carl Zogheib, Software Development Engineer (AWS Lambda Runtimes), Amazon Web Services
+1. Irshad A Buchh, Amazon Web Services
+2. Carl Zogheib, Software Development Engineer (AWS Lambda Runtimes), Amazon Web Services
 
 ## Prerequisites
 In order to implement the instructions laid out in this post, you will need the following:
