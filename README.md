@@ -10,9 +10,13 @@ At AWS re:Invent 2020, [AWS Lambda](https://aws.amazon.com/lambda) released [Con
  - Customers using container tooling and packaging couldn’t get the full benefits of AWS Lambda.
  - Customers couldn’t use their preferred community or private enterprise container images.
 
-This blog post discusses the architecture and implementation of an HTTP API that is backed by two AWS Lambda functions packaged as a container image. These Lambda functions use the AWS SDK to retrieve data from a backend Amazon DynamoDB table. We use [AWS CDK](https://aws.amazon.com/cdk/) for the  implementation of this architecture.
+This project discusses the architecture and implementation of an HTTP API that is backed by two AWS Lambda functions packaged as a container image. These Lambda functions use the AWS SDK to retrieve data from a backend Amazon DynamoDB table. We use [AWS CDK](https://aws.amazon.com/cdk/) for the  implementation of this architecture.
 
 We will also discuss the new AWS Lambda 1ms Billing Granularity that adds to the cost savings for customers.
+
+## Contributors
+Irshad A Buchh, Amazon Web Services
+Carl Zogheib, Software Development Engineer (AWS Lambda Runtimes), Amazon Web Services
 
 ## Prerequisites
 In order to implement the instructions laid out in this post, you will need the following:
