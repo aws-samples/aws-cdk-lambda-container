@@ -16,7 +16,7 @@ We will also discuss the new AWS Lambda 1ms Billing Granularity that adds to the
 
 ## Contributors
 1. Irshad A Buchh, Amazon Web Services
-2. Carl Zogheib, Software Development Engineer (AWS Lambda Runtimes), Amazon Web Services
+2. Carl Zogheib, Software Development Engineer (AWS Lambda), Amazon Web Services
 
 ## Prerequisites
 In order to implement the instructions laid out in this post, you will need the following:
